@@ -140,13 +140,8 @@ public class ORBSLAMForCameraActivity extends Activity {
 
 		//textureView = (TextureView) findViewById(R.id.img_dealed);
 		imgDealed = (ImageView) findViewById(R.id.img_dealed);
-		mStatus = (TextView) findViewById(R.id.tv_status);
-		x_pose = (TextView)findViewById(R.id.x_pose);
-		y_pose = (TextView)findViewById(R.id.y_pose);
-		z_pose = (TextView)findViewById(R.id.z_pose);
-		yaw = (TextView)findViewById(R.id.yaw);
-		pitch = (TextView)findViewById(R.id.pitch);
-		roll = (TextView)findViewById(R.id.roll);
+
+
 		counter = 0;
 		average_fps = 0;
 		img_count = 1;
@@ -301,10 +296,10 @@ public class ORBSLAMForCameraActivity extends Activity {
 											{
 												if(!mSaveImage)
 												{
-													OrbNdkHelper.trackWithCombinedImage(imageByteArray);
+													//OrbNdkHelper.trackWithCombinedImage(imageByteArray);
 												//final Bitmap bitmap = Bitmap.createBitmap(CameraImageWidth, CameraImageHeight, Bitmap.Config.ARGB_8888);
 												//bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(bitmapData));
-													pos = OrbNdkHelper.getCurrentPose();
+													//pos = OrbNdkHelper.getCurrentPose();
 													runOnUiThread(new Runnable() {
 													@Override
 													public void run() {

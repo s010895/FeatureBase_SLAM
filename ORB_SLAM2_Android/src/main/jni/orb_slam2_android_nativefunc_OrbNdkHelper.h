@@ -18,6 +18,16 @@ JavaVM* jvm;
 JNIEXPORT void JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_initSystemWithParameters
   (JNIEnv *, jclass, jstring, jstring);
 
+/*
+JNIEXPORT void JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_trackRealTime
+  (JNIEnv * env, jclass cls);
+*/
+JNIEXPORT jintArray JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_trackRealTime
+  (JNIEnv * env, jclass cls);
+
+
+JNIEXPORT void JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_trackWithCombinedImage
+  (JNIEnv *env, jclass cls, jbyteArray data);
 
 JNIEXPORT jintArray JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_startCurrentStereo
   (JNIEnv *, jclass, jdouble, jintArray,jintArray, jint, jint);

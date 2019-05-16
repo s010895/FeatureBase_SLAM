@@ -39,6 +39,44 @@ JNIEXPORT void JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_initSystem
 	env->ReleaseStringUTFChars(VOCPath, vocChar);
 	init_end=true;
 }
+
+JNIEXPORT jintArray JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_trackRealTime
+(JNIEnv * env, jclass cls) {
+
+        cv::Mat ima=s->TrackRealTime();
+		jintArray resultArray = env->NewIntArray(ima.rows * ima.cols);
+        jbyteArray resultByteArray = env->NewByteArray(4*ima.rows * ima.cols);
+		jint *resultPtr;
+		//jbyte *resultByte;
+		resultPtr = env->GetIntArrayElements(resultArray, false);
+		/*
+		resultByte = env->GetByteArrayElements(resultByteArray,false);
+		int k = 0;
+		for(int i=0; i<ima.rows; i++)
+		    for(int j=0; j<ima.cols; j++)
+		    {
+		        resultByte[k*4] = ima.at<unsigned char>(i,j);
+		        resultByte[k*4+1] = ima.at<unsigned char>(i,j);
+		        resultByte[k*4+2] = ima.at<unsigned char>(i,j);
+		        resultByte[k*4+3] = (unsigned char)0xff;
+		        k++;
+		}
+		*/
+
+		for (int i = 0; i < ima.rows; i++)
+			for (int j = 0; j < ima.cols; j++) {
+				int R = ima.at < Vec3b > (i, j)[0];
+				int G = ima.at < Vec3b > (i, j)[1];
+				int B = ima.at < Vec3b > (i, j)[2];
+				resultPtr[i * ima.cols + j] = 0xff000000 + (R << 16) + (G << 8) + B;
+		}
+		env->ReleaseIntArrayElements(resultArray, resultPtr, 0);
+
+        //env->ReleaseByteArrayElements(resultByteArray, resultByte, 0);
+
+	return resultArray;
+
+}
 JNIEXPORT jintArray JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_startCurrentStereo(
 		JNIEnv * env, jclass cls, jdouble curTimeStamp, jintArray buf,jintArray buf2, jint w,
 		jint h) {

@@ -63,27 +63,29 @@ void MapDrawer::DrawMapPoints(GLS2Helper *gls2Helper) {
     if(vpMPs.empty())
         return;
     size_t pointNumber = vpMPs.size();
-    GLfloat *mapPointData = new GLfloat[(pointNumber+8)*7];
-    mapPointData[0]=-0.08-twc.at<float>(0);mapPointData[1]=0.03-twc.at<float>(1);mapPointData[2]=1.0+twc.at<float>(2);
-    mapPointData[3]=0.0;mapPointData[4]=1.0f;mapPointData[5]=0.0;mapPointData[6]=0.0;
-    mapPointData[7]=0.08-twc.at<float>(0);mapPointData[8]=0.03-twc.at<float>(1);mapPointData[9]=1.0+twc.at<float>(2);
-    mapPointData[10]=0.0;mapPointData[11]=1.0f;mapPointData[12]=0.0;mapPointData[13]=0.0;
+    GLfloat *cameraPointData = new GLfloat[8*7];
+    cameraPointData[0]=-0.08;cameraPointData[1]=0.03;cameraPointData[2]=1.0;
+    cameraPointData[3]=0.0;cameraPointData[4]=1.0f;cameraPointData[5]=0.0;cameraPointData[6]=0.0;
+    cameraPointData[7]=0.08;cameraPointData[8]=0.03;cameraPointData[9]=1.0;
+    cameraPointData[10]=0.0;cameraPointData[11]=1.0f;cameraPointData[12]=0.0;cameraPointData[13]=0.0;
 
-    mapPointData[14]=-0.08-twc.at<float>(0);mapPointData[15]=0.03-twc.at<float>(1);mapPointData[16]=1.0+twc.at<float>(2);
-    mapPointData[17]=0.0;mapPointData[18]=1.0f;mapPointData[19]=0.0;mapPointData[20]=0.0;
-    mapPointData[21]=-0.08-twc.at<float>(0);mapPointData[22]=-0.03-twc.at<float>(1);mapPointData[23]=1.0+twc.at<float>(2);
-    mapPointData[24]=0.0;mapPointData[25]=1.0f;mapPointData[26]=0.0;mapPointData[27]=0.0;
+    cameraPointData[14]=-0.08;cameraPointData[15]=0.03;cameraPointData[16]=1.0;
+    cameraPointData[17]=0.0;cameraPointData[18]=1.0f;cameraPointData[19]=0.0;cameraPointData[20]=0.0;
+    cameraPointData[21]=-0.08;cameraPointData[22]=-0.03;cameraPointData[23]=1.0;
+    cameraPointData[24]=0.0;cameraPointData[25]=1.0f;cameraPointData[26]=0.0;cameraPointData[27]=0.0;
 
-    mapPointData[28]=-0.08-twc.at<float>(0);mapPointData[29]=-0.03-twc.at<float>(1);mapPointData[30]=1.0+twc.at<float>(2);
-    mapPointData[31]=0.0;mapPointData[32]=1.0f;mapPointData[33]=0.0;mapPointData[34]=0.0;
-    mapPointData[35]=0.08-twc.at<float>(0);mapPointData[36]=-0.03-twc.at<float>(1);mapPointData[37]=1.0+twc.at<float>(2);
-    mapPointData[38]=0.0;mapPointData[39]=1.0f;mapPointData[40]=0.0;mapPointData[41]=0.0;
+    cameraPointData[28]=-0.08;cameraPointData[29]=-0.03;cameraPointData[30]=1.0;
+    cameraPointData[31]=0.0;cameraPointData[32]=1.0f;cameraPointData[33]=0.0;cameraPointData[34]=0.0;
+    cameraPointData[35]=0.08;cameraPointData[36]=-0.03;cameraPointData[37]=1.0;
+    cameraPointData[38]=0.0;cameraPointData[39]=1.0f;cameraPointData[40]=0.0;cameraPointData[41]=0.0;
 
-    mapPointData[42]=0.08-twc.at<float>(0);mapPointData[43]=-0.03-twc.at<float>(1);mapPointData[44]=1.0+twc.at<float>(2);
-    mapPointData[45]=0.0;mapPointData[46]=1.0f;mapPointData[47]=0.0;mapPointData[48]=0.0;
-    mapPointData[49]=0.08-twc.at<float>(0);mapPointData[50]=0.03-twc.at<float>(1);mapPointData[51]=1.0+twc.at<float>(2);
-    mapPointData[52]=0.0;mapPointData[53]=1.0f;mapPointData[54]=0.0;mapPointData[55]=0.0;
-    int dataOffset = 56;
+    cameraPointData[42]=0.08;cameraPointData[43]=-0.03;cameraPointData[44]=1.0;
+    cameraPointData[45]=0.0;cameraPointData[46]=1.0f;cameraPointData[47]=0.0;cameraPointData[48]=0.0;
+    cameraPointData[49]=0.08;cameraPointData[50]=0.03;cameraPointData[51]=1.0;
+    cameraPointData[52]=0.0;cameraPointData[53]=1.0f;cameraPointData[54]=0.0;cameraPointData[55]=0.0;
+
+    GLfloat *mapPointData = new GLfloat[(pointNumber)*7];
+    int dataOffset = 0;
     for(size_t i; i<vpMPs.size(); i++)
     {
         cv::Mat pos = vpMPs[i]->GetWorldPos();
@@ -101,8 +103,9 @@ void MapDrawer::DrawMapPoints(GLS2Helper *gls2Helper) {
         //LOG("Z: %f\n",pos.at<float>(2));
     }
     //LOG("draw MapPoints");
-    gls2Helper->draw(mapPointData, pointNumber, mCameraPose, modelVector);
+    gls2Helper->draw(mapPointData, pointNumber, cameraPointData, 8, mCameraPose, modelVector);
     delete [] mapPointData;
+    delete [] cameraPointData;
     /*
 	const vector<MapPoint*> &vpMPs = mpMap->GetAllMapPoints();
 	const vector<MapPoint*> &vpRefMPs = mpMap->GetReferenceMapPoints();

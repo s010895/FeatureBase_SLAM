@@ -23,7 +23,24 @@ static void checkGLError(const char *op){
         LOGI("after %s() glError (0x%x)\n",op,error);
     }
 }
-
+const char *CAMERA_VERTEX_SHADER=
+        "uniform mat4 u_MVPMatrix;                 \n"
+        "attribute vec4 a_Position;                \n"
+        "attribute vec4 a_Color;                   \n"
+        "varying vec4 v_Color;                     \n"
+        "void main()                               \n"
+        "{                                         \n"
+        "   v_Color = a_Color;                      \n"
+        "   gl_PointSize = 4.0;                     \n"
+        "   gl_Position = u_MVPMatrix * a_Position; \n"
+        "}                                          \n";
+const char *CAMERA_FRAGMENT_SHADER=
+        "precision mediump float; \n"
+        "varying vec4 v_Color; \n"
+        "void main()           \n"
+        "{                      \n"
+        "   gl_FragColor =  v_Color; \n"
+        "}                        \n";
 const char *VERTEX_SHADER=
         "uniform mat4 u_MVPMatrix;                 \n"
         "attribute vec4 a_Position;                \n"
@@ -80,6 +97,7 @@ void GLS2Helper::create(){
     printGLString("Extensions",GL_EXTENSIONS);
 
     mProgram = GLUtils::createProgram(&VERTEX_SHADER, &FRAGMENT_SHADER);
+    cameraProgram = GLUtils::createProgram(&CAMERA_VERTEX_SHADER, &CAMERA_FRAGMENT_SHADER);
     if(!mProgram)
     {
         LOGD("Could not create program!!");
@@ -123,7 +141,8 @@ void GLS2Helper::change(int width ,int height){
 void GLS2Helper::setCameraPose(cv::Mat twc){
 
 }
-void GLS2Helper::draw(GLfloat *verticesData, size_t pointNumber,cv::Mat &mCameraPose, std::vector<float> &modelVector){
+void GLS2Helper::draw(GLfloat *verticesData, size_t pointNumber, GLfloat *cameraData, size_t cameraNumber,
+cv::Mat &mCameraPose, std::vector<float> &modelVector){
 
     //cv::Mat Rwc = mCameraPose.rowRange(0,3).colRange(0,3).t();
     //cv::Mat twc = -Rwc*mCameraPose.rowRange(0,3).col(3);
@@ -176,8 +195,42 @@ void GLS2Helper::draw(GLfloat *verticesData, size_t pointNumber,cv::Mat &mCamera
     mMVPMatrix->multiply(*mProjectMatrix, *mMVPMatrix);
 
     glUniformMatrix4fv(mMVPMatrixHandle,1,GL_FALSE,mMVPMatrix->mData);
-    glDrawArrays(GL_LINES,0,8);
-    glDrawArrays(GL_POINTS,8,pointNumber);
+    glDrawArrays(GL_POINTS,0,pointNumber);
+
+
+    glUseProgram(cameraProgram);
+
+     cameraMatrixHandle = (GLuint) glGetUniformLocation(cameraProgram,"u_MVPMatrix");
+     cameraPositionHandle = (GLuint) glGetAttribLocation(cameraProgram,"a_Position");
+     cameraColorHandle = (GLuint) glGetAttribLocation(cameraProgram,"a_Color");
+        mModelMatrix->identity();
+        mModelMatrix->rotate( 30 , 0  , 0  ,1);
+        glVertexAttribPointer(
+        (GLuint) cameraPositionHandle,
+        3,
+        GL_FLOAT,
+        GL_FALSE,
+        4*7,
+        cameraData);
+
+        glEnableVertexAttribArray((GLuint)cameraPositionHandle);
+
+        glVertexAttribPointer(
+        (GLuint) cameraColorHandle,
+        4,
+        GL_FLOAT,
+        GL_FALSE,
+        4*7,
+        cameraData+3);
+
+        glEnableVertexAttribArray((GLuint)cameraColorHandle);
+
+        mMVPMatrix->multiply(*mViewMatrix, *mModelMatrix);
+
+        mMVPMatrix->multiply(*mProjectMatrix, *mMVPMatrix);
+
+        glUniformMatrix4fv(cameraMatrixHandle,1,GL_FALSE,mMVPMatrix->mData);
+        glDrawArrays(GL_LINES,0,8);
     checkGLError("glDrawArrays");
     //delete mViewMatrix;
 

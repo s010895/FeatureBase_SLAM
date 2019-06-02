@@ -22,7 +22,7 @@ public:
 
     void change(int width, int height);
 
-    void draw(GLfloat *verticesData, size_t pointNumber, cv::Mat &mCameraPose, std::vector<float> &modelVector);
+    void draw(GLfloat *verticesData, size_t pointNumber, GLfloat *cameraData, size_t cameraNumber,cv::Mat &mCameraPose, std::vector<float> &modelVector);
 
     void setCameraPose(cv::Mat twc);
 private:
@@ -37,6 +37,10 @@ private:
     GLuint mPositionHandle;
     GLuint mColorHandle;
 
+    GLuint cameraProgram;
+    GLuint cameraMatrixHandle;
+    GLuint cameraPositionHandle;
+    GLuint cameraColorHandle;
     cv::Mat cameraPose;
 
 

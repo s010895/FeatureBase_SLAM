@@ -43,7 +43,7 @@ JNIEXPORT void JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_initSystem
 JNIEXPORT jintArray JNICALL Java_orb_slam2_android_nativefunc_OrbNdkHelper_trackRealTime
 (JNIEnv * env, jclass cls) {
 
-        cv::Mat ima=s->TrackRealTime();
+        cv::Mat ima;
 		jintArray resultArray = env->NewIntArray(ima.rows * ima.cols);
         jbyteArray resultByteArray = env->NewByteArray(4*ima.rows * ima.cols);
 		jint *resultPtr;

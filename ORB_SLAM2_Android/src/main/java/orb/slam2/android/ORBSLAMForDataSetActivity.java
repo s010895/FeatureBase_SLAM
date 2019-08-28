@@ -61,12 +61,11 @@ public class ORBSLAMForDataSetActivity extends Activity implements OnClickListen
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);// 隐藏标题
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.activity_dataset_orb);
-		imgSource = (ImageView) findViewById(R.id.img_origin);
 		imgDealed = (ImageView) findViewById(R.id.img_dealed);
 		start = (Button) findViewById(R.id.start);
 		stop = (Button) findViewById(R.id.stop);
@@ -143,20 +142,14 @@ public class ORBSLAMForDataSetActivity extends Activity implements OnClickListen
 										current_R = new int[w*h];
 										currentL.getPixels(current_L, 0, w, 0, 0, w, h);
 										currentR.getPixels(current_R, 0, w, 0, 0, w, h);
-        								runOnUiThread(new Runnable() {
-        									@Override
-        									public void run() {
-        										// TODO Auto-generated method stub
-        										imgSource.setImageBitmap(currentL);
-        									}
-        								});
+        								
         								// TODO Auto-generated method stub
         								int[] resultInt = OrbNdkHelper.startCurrentStereo(
         										timestamp, current_L,current_R, w, h);
-        								resultImg = Bitmap.createBitmap(w, h,
+        								resultImg = Bitmap.createBitmap(w, h+20,
         										Config.RGB_565);
         								resultImg
-        										.setPixels(resultInt, 0, w, 0, 0, w, h);
+        										.setPixels(resultInt, 0, w, 0, 0, w, h+20);
         								runOnUiThread(new Runnable() {
         									@Override
         									public void run() {

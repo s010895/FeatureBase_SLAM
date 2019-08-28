@@ -25,9 +25,9 @@ public class DataSetModeActivity extends Activity implements OnClickListener {
   Button ChooseDataSet, ChooseCalibration, ChooseVOC, finish, ChooseDataSet2;
   TextView DatasetTxt, CalibrationTxt, VOCPathText, DatasetTxt2;
 
-  private static final int REQUEST_CODE_1 = 1;   //图片地址请求码
-  private static final int REQUEST_CODE_2 = 2;   //TUM文件请求码
-  private static final int REQUEST_CODE_3 = 3;   //VOC文件请求码
+  private static final int REQUEST_CODE_1 = 1;  
+  private static final int REQUEST_CODE_2 = 2;   
+  private static final int REQUEST_CODE_3 = 3;   
   private static final int REQUEST_CODE_4 = 4;
   private Intent fileChooserIntent;
   public static final String EXTRA_FILE_CHOOSER = "file_chooser";

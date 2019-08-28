@@ -30,12 +30,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/dataset_mode" />
 
-            <Button
-                android:id="@+id/camera_mode"
-                android:layout_width="150dip"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dip"
-                android:text="@string/camera_mode" />
         </LinearLayout>
 
         <TextView
